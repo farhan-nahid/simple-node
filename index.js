@@ -1,11 +1,3 @@
-const express = require('express');
-const cors = require('cors');
-
-const app = express();
-app.use(cors());
-
-const port = process.env.PORT || 5000;
-
 const users = [
   {
     id: 1,
@@ -239,6 +231,18 @@ const users = [
   },
 ];
 
+const express = require('express');
+const cors = require('cors');
+
+const app = express();
+
+// use middleware
+
+app.use(cors());
+app.use(express.json());
+
+const port = process.env.PORT || 5000;
+
 // GET API
 
 app.get('/users', (req, res) => {
@@ -268,6 +272,16 @@ app.get('/user/:id', (req, res) => {
   const id = req.params.id;
   const user = users.find((user) => user.id === Number(id));
   res.send(user);
+});
+
+// POST API
+
+app.post('/add-user', (req, res) => {
+  const newUser = req.body;
+  newUser.id = users.length + 1;
+  users.push(newUser);
+  // res.send(JSON.stringify(newUser));
+  res.json(newUser);
 });
 
 // ROOT API
